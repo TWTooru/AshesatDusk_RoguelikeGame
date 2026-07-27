@@ -1,12 +1,45 @@
-[gd_scene load_steps=3 format=3 uid="uid://main_scene_001"]
+[gd_scene load_steps=10 format=3 uid="uid://main_scene_001"]
 
 [ext_resource type="Script" path="res://src/presentation/graveyard_backdrop.gd" id="1_backdrop"]
-[ext_resource type="PackedScene" uid="uid://player_scene_001" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="Script" path="res://src/rooms/room_manager.gd" id="2_room_mgr"]
+[ext_resource type="PackedScene" uid="uid://player_scene_001" path="res://scenes/player/player.tscn" id="3_player"]
+[ext_resource type="Script" path="res://src/combat/weapon_controller.gd" id="4_weapons"]
+[ext_resource type="PackedScene" uid="uid://hud_scene_001" path="res://scenes/ui/hud.tscn" id="5_hud"]
+[ext_resource type="PackedScene" uid="uid://title_screen_scene_001" path="res://scenes/ui/title_screen.tscn" id="6_title"]
+[ext_resource type="PackedScene" uid="uid://upgrade_panel_scene_001" path="res://scenes/ui/upgrade_panel.tscn" id="7_upgrade"]
+[ext_resource type="PackedScene" uid="uid://results_screen_scene_001" path="res://scenes/ui/results_screen.tscn" id="8_results"]
+[ext_resource type="Script" path="res://src/core/game_controller.gd" id="9_controller"]
 
 [node name="Main" type="Node2D"]
 
 [node name="Backdrop" type="Node2D" parent="."]
 script = ExtResource("1_backdrop")
 
-[node name="Player" parent="." instance=ExtResource("2_player")]
+[node name="RoomManager" type="Node2D" parent="."]
+script = ExtResource("2_room_mgr")
+
+[node name="Player" parent="." instance=ExtResource("3_player")]
 position = Vector2(640, 400)
+
+[node name="WeaponController" type="Node2D" parent="Player"]
+script = ExtResource("4_weapons")
+
+[node name="HUD" parent="." instance=ExtResource("5_hud")]
+
+[node name="TitleScreen" parent="." instance=ExtResource("6_title")]
+
+[node name="UpgradePanel" parent="." instance=ExtResource("7_upgrade")]
+visible = false
+
+[node name="ResultsScreen" parent="." instance=ExtResource("8_results")]
+visible = false
+
+[node name="GameController" type="Node2D" parent="." node_paths=PackedStringArray("player_node", "room_manager", "weapon_controller", "hud", "title_screen", "upgrade_panel", "results_screen")]
+script = ExtResource("9_controller")
+player_node = NodePath("../Player")
+room_manager = NodePath("../RoomManager")
+weapon_controller = NodePath("../Player/WeaponController")
+hud = NodePath("../HUD")
+title_screen = NodePath("../TitleScreen")
+upgrade_panel = NodePath("../UpgradePanel")
+results_screen = NodePath("../ResultsScreen")
