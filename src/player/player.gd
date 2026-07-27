@@ -1,0 +1,96 @@
+# src/player/player.gd
+class_name Player
+extends CharacterBody2D
+
+signal health_changed(current: float, maximum: float)
+signal died
+
+const PLAY_BOUNDS := Rect2(48, 112, 1184, 560)
+
+var stats := {
+	"max_health": 100.0,
+	"health": 100.0,
+	"move_speed": 260.0,
+	"damage_reduction": 0.0,
+	"damage_mult": 1.0,
+	"attack_speed_mult": 1.0,
+	"life_steal": 0.0,
+}
+
+var invulnerability_left := 0.0
+var control_enabled := true
+var dead := false
+var facing_direction := Vector2.RIGHT
+
+func _ready() -> void:
+	add_to_group("player")
+
+func reset_for_run(new_stats: Dictionary) -> void:
+	stats = new_stats.duplicate(true)
+	if not stats.has("health"):
+		stats.health = stats.max_health
+	invulnerability_left = 0.0
+	control_enabled = true
+	dead = false
+	queue_redraw()
+	health_changed.emit(stats.health, stats.max_health)
+
+func get_stats() -> Dictionary:
+	return stats.duplicate(true)
+
+func set_control_enabled(value: bool) -> void:
+	control_enabled = value
+
+func set_invulnerability_for_test(value: float) -> void:
+	invulnerability_left = value
+
+func heal(amount: float) -> void:
+	if dead:
+		return
+	var old_health: float = stats.health
+	stats.health = minf(float(stats.max_health), float(stats.health) + amount)
+	if stats.health != old_health:
+		health_changed.emit(stats.health, stats.max_health)
+
+func take_damage(amount: float) -> bool:
+	if invulnerability_left > 0.0 or dead:
+		return false
+	var reduction: float = float(stats.get("damage_reduction", 0.0))
+	var actual_damage := maxf(1.0, amount * (1.0 - reduction))
+	stats.health = maxf(0.0, float(stats.health) - actual_damage)
+	invulnerability_left = 0.6
+	health_changed.emit(stats.health, stats.max_health)
+	queue_redraw()
+	if float(stats.health) <= 0.0:
+		dead = true
+		died.emit()
+	return true
+
+func _physics_process(delta: float) -> void:
+	invulnerability_left = maxf(0.0, invulnerability_left - delta)
+	if invulnerability_left > 0.0:
+		queue_redraw()
+	if control_enabled and not dead:
+		var input_vector := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+		if input_vector != Vector2.ZERO:
+			facing_direction = input_vector.normalized()
+		velocity = input_vector * float(stats.move_speed)
+		move_and_slide()
+		global_position = global_position.clamp(PLAY_BOUNDS.position, PLAY_BOUNDS.end)
+	else:
+		velocity = Vector2.ZERO
+
+func _draw() -> void:
+	if dead:
+		return
+	var fill_color := Color(0.95, 0.95, 1.0, 1.0) if invulnerability_left > 0.0 else Color(0.2, 0.25, 0.35, 1.0)
+	var hood_color := Color(0.12, 0.15, 0.22, 1.0)
+	var rune_gold := Color(0.95, 0.8, 0.2, 1.0)
+	
+	# Hood / Body (16x20)
+	draw_rect(Rect2(-8, -10, 16, 20), fill_color)
+	draw_rect(Rect2(-9, -11, 18, 8), hood_color)
+	
+	# Gold facing rune dot/arrow indicator
+	var rune_pos := facing_direction * 7.0
+	draw_circle(rune_pos, 3.0, rune_gold)
