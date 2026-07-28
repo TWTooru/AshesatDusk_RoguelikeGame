@@ -9,15 +9,8 @@ signal demo_start_requested
 @onready var subtitle_label: Label = $VBox/SubtitleLabel
 @onready var formal_btn: Button = $VBox/FormalButton
 @onready var demo_btn: Button = $VBox/DemoButton
-@onready var title_art: TextureRect = $TitleArt
 
 func _ready() -> void:
-	var path := "res://assets/generated/title_art.png"
-	if title_art and FileAccess.file_exists(path):
-		var img := Image.load_from_file(path)
-		if img:
-			title_art.texture = ImageTexture.create_from_image(img)
-	
 	if title_label:
 		title_label.text = CopyZhTw.GAME_TITLE
 	if subtitle_label:

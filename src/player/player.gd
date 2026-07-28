@@ -101,7 +101,3 @@ func _draw() -> void:
 		draw_string(font, text_pos + off, text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, outline_color)
 	# Main Text
 	draw_string(font, text_pos, text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, text_color)
-
-	# Gold facing rune dot indicator
-	var rune_pos := facing_direction * 28.0
-	draw_circle(rune_pos, 4.0, Color(0.95, 0.8, 0.2, 1.0))

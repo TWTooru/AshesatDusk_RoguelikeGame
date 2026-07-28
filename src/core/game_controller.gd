@@ -83,6 +83,14 @@ func _process(delta: float) -> void:
 		if remaining_sec <= 0.0 and not finished:
 			finish_run(&"timeout")
 
+	if phase == GamePhase.Phase.DOORS and is_instance_valid(player_node) and not current_doors.is_empty():
+		var px := player_node.global_position.x
+		if px <= 60.0:
+			select_door(0)
+		elif px >= 1220.0:
+			select_door(1)
+
+
 func start_run(next_config: RunConfig) -> void:
 	config = next_config
 	rng.seed = config.seed_value
