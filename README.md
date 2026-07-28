@@ -1,76 +1,91 @@
-# 《暮墓餘燼 (Ashes at Dusk)》
+# 回應市場需求的遊戲：Ashes at Dusk
 
----
+`Ashes at Dusk` 是一款以「短時間、高重玩性、容易上手」為核心的 2D Roguelike 生存遊戲。玩家在黃昏墓園中移動，角色會自動攻擊接近的敵人；在房間戰鬥、升級選擇與首領戰中盡可能存活並完成一輪挑戰。
 
-## 📖 遊戲介紹 (Game Overview)
+## 遊戲介紹
 
-### 1. 市場痛點與設計回應 (Market Demand Response)
-在當今遊戲市場中，玩家對「碎片化時間」、「低學習門檻」與「高視覺辨識度」的需求大幅提升：
-- **極簡符號視覺 (Text-Based Visual Art)**：回應當前文字遊戲與簡約暗黑風熱潮，擺脫過度複雜貼圖，將玩家、怪物、彈幕全數以高對比中文書法文字實體（`玩家`、`腐屍`、`骸骨弓手`、`暗影蝙蝠`、`墓園騎士`、`無首守墓人`）繪製，視覺極致清晰且記憶點強烈。
-- **快節奏零負擔操作 (Auto-Attacking Combat)**：回應類倖存者（Survivor-like）熱潮，玩家僅需掌控 `WASD` 八方向移動走位，自動鎖定武器（`幽魂彈`、`骨刃環`、`冥火法陣`）全自動打擊周圍敵軍。
+### 市場需求與設計回應
 
-### 2. 玩家新手操作指南 (How to Play)
-- **移動 (Move)**：按下鍵盤 `W` / `A` / `S` / `D` 或 `方向鍵` 自由控制「玩家」走位。
-- **自動戰鬥 (Auto Combat)**：武器自動搜尋打擊最近敵人。
-- **能力升級與吸血 (Upgrades & Lifesteal)**：點擊或按鍵 `1/2/3` 選擇卡牌，解鎖新武器或強化「傷害吸血」（每次造成傷害皆回復生命並觸發**亮綠色閃光**）。選擇能力時時間完全暫停。
-- **實體門戶進關 (Enter Doors)**：波次清空後，操控主角直接走進左側或右側邊界牆壁即可自動傳送進入下個房間（武器祭壇、禁忌能力、療癒聖泉、詛咒寶箱）。
+近年輕量化 Roguelike 與 Survivor-like 遊戲受到玩家喜愛，常見需求包括：能在短時間內開始遊玩、操作門檻低、每局有成長感，以及失敗後仍願意再挑戰。本作以這些需求為方向設計：
 
----
+- **容易上手**：以 `WASD` 或方向鍵移動，角色自動對敵人攻擊。
+- **短局循環**：由房間探索、戰鬥、升級與首領戰組成，適合快速遊玩與重複挑戰。
+- **明確成長**：擊敗敵人後可在三個升級選項中擇一，強化傷害、攻擊頻率、生命與吸血等能力。
+- **可讀性與氛圍**：使用墓園背景、文字式角色圖像、特效與音效，建立低成本但辨識度高的暗黑風格。
+- **公平的首領戰**：首領保留衝刺壓力，但其移動會限制於戰場內；玩家碰到首領身體時會受到週期性傷害。
 
-## 🛠️ 開發工具 (Development Tools)
+### 遊玩方式
 
-- **遊戲引擎 (Engine)**：Godot Engine `v4.7.1.stable` (GDScript 2.0)
-- **AI 協作與生成工具 (AI & Agent Tools)**：
-  - **Antigravity AI Agent System**：輔助遊戲架構規劃、領域模型建構、GDScript 代碼生成與重構。
-  - **AI 測試驅動套件**：透過 Headless CLI 腳本生成全自動單元測試（11 項測試腳本 100% 自動化驗收）。
-  - **AI 圖像生成工具**：輔助生成暗黑墓園場景氛圍素材。
-- **著色器與視覺技術 (Shaders & Graphics)**：
-  - Godot 2D Canvas Shader (`blur.gdshader` 80% Mipmap Screen Blur 磨砂玻璃效果)。
-  - GDScript `draw_string` 與字型基線 `(ascent - descent) / 2.0` 精確對齊演算法。
-  - 4-Directional Outline 筆刷演算法。
-- **版本控制 (VCS)**：Git & GitHub Remote (`TWTooru/EMBERS_RoguelikeGame`)
+1. 使用 `W`、`A`、`S`、`D` 或方向鍵移動。
+2. 角色會自動鎖定並攻擊敵人。
+3. 清除房間敵人後，通過門前往下一個房間。
+4. 在升級畫面按 `1`、`2`、`3` 選擇一項強化。
+5. 面對首領「無首守墓人」，避開衝刺與近身接觸，完成挑戰。
 
----
+## 開發工具
 
-## 📜 開發過程說明 (Development Process)
+| 類別 | 使用工具 | 用途 |
+| --- | --- | --- |
+| 遊戲引擎 | Godot Engine 4.7.1 | 場景管理、2D 碰撞、輸入、音效與畫面呈現。 |
+| 程式語言 | GDScript 2.0 | 實作角色、敵人、房間、戰鬥、升級與 UI 邏輯。 |
+| 版本控制 | Git、GitHub | 保存開發歷程、管理分支與備份原始碼。 |
+| 測試 | Godot Headless、PowerShell | 執行單元與整合測試，檢查專案匯入、腳本解析與遊戲流程。 |
+| AI 輔助 | AI 程式助理 | 協助架構檢查、問題分析、測試案例設計、程式碼審查與 README 撰寫。 |
 
-### 階段一：市場需求分析與專案立項 (Market Analysis & Ideation)
-分析現行 Roguelike 與倖存者遊戲市場，確立「文字符號視覺 + 自動戰鬥 + 房間式成長」的核心定位。利用 AI Agent 完成軟體架構設計，並預先建立 11 個 Headless 自動測試腳本（TDD 測試驅動開發），確保遊戲邏輯健全。
+## 開發過程說明
 
-### 階段二：文字符號視覺革新 (Text-Based Visual Art Implementation)
-將傳統 2D 貼圖/幾何圖形全面替換為中文文字繪製。克服 Godot 4 中文字體預設懸空的基線問題，計算 `(ascent - descent) / 2.0` 垂直偏移，將中文字文字心精確鎖定於物理碰撞中心，並加上 4 向筆刷深黑描邊以確保文字在高壓戰場中的清晰度。
+### 1. 發想與需求定位
 
-### 階段三：高質感 UI 與磨砂玻璃著色器 (UI & Shader Enhancement)
-針對現代玩家對 UI 質感的期待，編寫 `blur.gdshader` 著色器，為主畫面、升級選單及結算畫面加上 80% 高質感磨砂玻璃模糊背景，並將選單面板提升至獨立 `CanvasLayer 50~70`，徹底防止圖層穿透。
+先以「容易開始、單局時間短、能反覆挑戰」作為目標，選定 Roguelike 生存玩法。再將核心循環縮小為「移動 → 自動戰鬥 → 清房 → 升級 → 首領戰」，讓小型專案也能具備完整遊戲流程。
 
-### 階段四：打擊反饋與玩家體驗調校 (Juice & UX Refinement)
-1. **吸血機制與即時視覺回饋**：修復子彈傷害記錄，使吸血效果在所有武器上生效，並新增受傷（紅閃）與吸血（亮綠閃）之即時字體光芒。
-2. **能力選擇時間暫停**：在能力升級與門戶決策時暫停倒數計時器，提升玩家思考體驗。
-3. **快速展示模式**：設定 1 分鐘 / 4 關的極速展示模式，滿足以短影音推廣與簡報試玩的市場需求。
+### 2. 建立核心系統
 
-### 階段五：自動化測試與跨平台穩定性 (Verification & Publishing)
-實作 `ProjectSettings.globalize_path` 消除所有 Resource 載入與匯出警示，解決 CharacterBody2D 實例化空值問題。最終通過 11 項單元與整合測試，並成功發布與推送到 GitHub 儲存庫。
+使用 Godot 場景與 GDScript 建立玩家、近戰敵人、遠程敵人、衝刺敵人、投射物與武器控制器。玩家可移動並自動攻擊；敵人會追蹤玩家、造成接觸傷害，並依種類採用不同攻擊模式。
 
----
+### 3. 房間、升級與遊戲流程
 
-## 🚀 快速啟動與測試 (Quick Start)
+完成房間規劃與切換、敵人生成、出口門、升級選擇及勝敗畫面。每次升級都會直接影響下一段戰鬥，使每局過程保有策略選擇與成長回饋。
 
-### 執行遊戲
+### 4. 視覺與操作優化
+
+加入墓園背景、文字式角色圖像、描邊效果、UI 模糊 Shader、音效與受傷回饋。這些元素用有限的美術資源提升辨識度，並讓戰鬥狀態更容易閱讀。
+
+### 5. 首領問題修正與測試
+
+針對「無首守墓人」實作並驗證兩項修正：
+
+- 首領移動與衝刺後會被限制在可玩區域，避免衝出地圖。
+- 首領的接觸傷害範圍依碰撞身形設定，玩家貼到首領身體會受到 20 點傷害，並維持 0.8 秒冷卻。
+
+## 執行專案
+
+請以 Godot 4.7.1 或相容版本開啟專案根目錄，再執行 `scenes/main.tscn`。
+
+也可在 PowerShell 執行：
+
 ```powershell
-& 'C:\Users\user\Desktop\Godot_v4.7.1.exe' --path .
+$env:GODOT_EXE = 'C:\path\to\Godot.exe'
+& $env:GODOT_EXE --path .
 ```
 
-### 執行自動測試套件
+## 執行測試
+
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\tests\run_all.ps1
+$env:GODOT_EXE = 'C:\path\to\Godot.exe'
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\run_all.ps1
 ```
 
-## 展示影片
+若只要執行首領測試：
 
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\run_all.ps1 -Only res://tests/unit/test_boss.gd
+```
+
+## 展示影片 
 
 [TNDA實作－暮墓餘燼 (Ashes at Dusk)](https://youtu.be/oFwzDAdyBKc)
 
----
 
-## 🔗 GitHub 儲存庫
-本專案完整原始碼已同步託管於：[TWTooru/EMBERS_RoguelikeGame](https://github.com/TWTooru/EMBERS_RoguelikeGame)
+## 專案連結
+
+[GitHub：TWTooru/AshesatDusk_RoguelikeGame](https://github.com/TWTooru/AshesatDusk_RoguelikeGame)
