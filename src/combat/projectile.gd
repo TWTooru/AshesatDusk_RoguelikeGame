@@ -11,6 +11,7 @@ var hit_registered := false
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	area_entered.connect(_on_area_entered)
+	z_index = 15
 
 func launch(dir: Vector2, speed: float, dmg: float, owner_faction: StringName, seconds: float) -> void:
 	velocity = dir.normalized() * speed
@@ -56,13 +57,15 @@ func _on_area_entered(area: Area2D) -> void:
 func _draw() -> void:
 	var font := ThemeDB.fallback_font
 	var text := "幽魂彈" if faction == &"player" else "箭"
-	var text_color := Color(0.3, 0.85, 1.0) if faction == &"player" else Color(1.0, 0.3, 0.3)
-	var font_size := 12
+	var text_color := Color(0.2, 0.95, 1.0, 1.0) if faction == &"player" else Color(1.0, 0.25, 0.25, 1.0)
+	var font_size := 18
 	var ascent := font.get_ascent(font_size)
 	var descent := font.get_descent(font_size)
 	var string_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
 	var text_pos := Vector2(-string_size.x / 2.0, (ascent - descent) / 2.0)
 
-	draw_string(font, text_pos + Vector2(1, 1), text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0, 0, 0, 0.8))
+	var outline_color := Color(0, 0, 0, 0.95)
+	var offsets := [Vector2(-1.5, -1.5), Vector2(1.5, -1.5), Vector2(-1.5, 1.5), Vector2(1.5, 1.5), Vector2(0, 2.0)]
+	for off in offsets:
+		draw_string(font, text_pos + off, text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, outline_color)
 	draw_string(font, text_pos, text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, text_color)
-

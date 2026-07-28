@@ -37,6 +37,9 @@ var bone_ring_angle := 0.0
 var bone_hit_history := {} # enemy_instance_id -> time_last_hit
 var active_flames: Array[Dictionary] = [] # list of {pos, radius, left, duration, warning_left, damage}
 
+func _ready() -> void:
+	z_index = 14
+
 func set_loadout(levels: Dictionary, new_stats: Dictionary) -> void:
 	weapon_levels = levels.duplicate(true)
 	stats = new_stats.duplicate(true)
@@ -89,7 +92,7 @@ func _process(delta: float) -> void:
 		var blade_count: int = DEFINITIONS[&"bone_ring"].blades[level - 1]
 		var rot_speed: float = DEFINITIONS[&"bone_ring"].rotation_speed
 		bone_ring_angle += rot_speed * delta
-		var radius := 54.0
+		var radius := 64.0
 		var now := Time.get_ticks_msec() / 1000.0
 		
 		for i in range(blade_count):
@@ -98,7 +101,7 @@ func _process(delta: float) -> void:
 			for enemy in enemies:
 				if is_instance_valid(enemy) and enemy.has_method("take_damage") and enemy.get("dead") != true:
 					var enemy_node := enemy as Node2D
-					if enemy_node and blade_pos.distance_to(enemy_node.global_position) < 18.0:
+					if enemy_node and blade_pos.distance_to(enemy_node.global_position) < 24.0:
 						var eid := enemy.get_instance_id()
 						var last_hit: float = float(bone_hit_history.get(eid, 0.0))
 						if now - last_hit >= 0.45:
@@ -185,14 +188,16 @@ func _spawn_nether_flame(enemies: Array) -> void:
 
 func _draw() -> void:
 	var font := ThemeDB.fallback_font
+	var outline_color := Color(0, 0, 0, 0.95)
+	var offsets := [Vector2(-1.5, -1.5), Vector2(1.5, -1.5), Vector2(-1.5, 1.5), Vector2(1.5, 1.5), Vector2(0, 2.0)]
 
 	# Bone Ring text
 	if weapon_levels.get(&"bone_ring", 0) > 0:
 		var level := int(weapon_levels[&"bone_ring"])
 		var blade_count: int = DEFINITIONS[&"bone_ring"].blades[level - 1]
-		var radius := 54.0
+		var radius := 64.0
 		var text := "骨刃環"
-		var font_size := 13
+		var font_size := 18
 		var ascent := font.get_ascent(font_size)
 		var descent := font.get_descent(font_size)
 		var string_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
@@ -201,8 +206,9 @@ func _draw() -> void:
 		for i in range(blade_count):
 			var angle := bone_ring_angle + (i * TAU / blade_count)
 			var b_pos := Vector2(cos(angle), sin(angle)) * radius
-			draw_string(font, b_pos + text_offset + Vector2(1, 1), text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0, 0, 0, 0.8))
-			draw_string(font, b_pos + text_offset, text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0.95, 0.95, 0.85, 1.0))
+			for off in offsets:
+				draw_string(font, b_pos + text_offset + off, text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, outline_color)
+			draw_string(font, b_pos + text_offset, text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(1.0, 0.98, 0.8, 1.0))
 
 	# Nether Flame text
 	for flame in active_flames:
@@ -212,10 +218,11 @@ func _draw() -> void:
 		else:
 			draw_circle(local_pos, flame.radius, Color(0.4, 0.0, 0.6, 0.35))
 			var flame_text := "冥火法陣"
-			var font_size := 14
+			var font_size := 22
 			var ascent := font.get_ascent(font_size)
 			var descent := font.get_descent(font_size)
 			var string_size := font.get_string_size(flame_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
 			var text_offset := Vector2(-string_size.x / 2.0, (ascent - descent) / 2.0)
-			draw_string(font, local_pos + text_offset, flame_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0.85, 0.4, 1.0, 0.9))
-
+			for off in offsets:
+				draw_string(font, local_pos + text_offset + off, flame_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, outline_color)
+			draw_string(font, local_pos + text_offset, flame_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0.9, 0.5, 1.0, 0.95))

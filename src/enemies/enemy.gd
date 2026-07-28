@@ -24,6 +24,7 @@ func _ready() -> void:
 	add_to_group("enemies")
 	collision_layer = 2 # Enemy layer
 	collision_mask = 3  # Player + Enemy layers
+	z_index = 10
 
 func configure(kind_id: StringName, difficulty: float, new_target: Node2D) -> void:
 	kind = kind_id
@@ -63,7 +64,7 @@ func _step_movement(_delta: float) -> void:
 func _check_contact_damage() -> void:
 	if contact_cooldown_left <= 0.0 and is_instance_valid(target):
 		var dist := global_position.distance_to(target.global_position)
-		if dist < 18.0 and target.has_method("take_damage"):
+		if dist < 22.0 and target.has_method("take_damage"):
 			if target.take_damage(contact_damage):
 				contact_cooldown_left = 0.8
 
@@ -78,20 +79,21 @@ func _draw() -> void:
 		&"knight": "墓園騎士",
 	}
 	var color_map := {
-		&"zombie": Color(0.4, 0.7, 0.45, 1.0),
-		&"archer": Color(0.75, 0.7, 0.6, 1.0),
-		&"bat": Color(0.7, 0.35, 0.8, 1.0),
-		&"knight": Color(0.9, 0.8, 0.3, 1.0),
+		&"zombie": Color(0.2, 0.9, 0.4, 1.0),
+		&"archer": Color(1.0, 0.75, 0.2, 1.0),
+		&"bat": Color(0.9, 0.35, 0.95, 1.0),
+		&"knight": Color(1.0, 0.85, 0.15, 1.0),
 	}
 	var text: String = text_map.get(kind, "怪物")
 	var text_color: Color = color_map.get(kind, Color.WHITE)
-	var font_size := 15
+	var font_size := 22
 	var ascent := font.get_ascent(font_size)
 	var descent := font.get_descent(font_size)
 	var string_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
 	var text_pos := Vector2(-string_size.x / 2.0, (ascent - descent) / 2.0)
 
-	# Shadow & Text
-	draw_string(font, text_pos + Vector2(1, 1), text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0, 0, 0, 0.8))
+	var outline_color := Color(0, 0, 0, 0.95)
+	var offsets := [Vector2(-1.5, -1.5), Vector2(1.5, -1.5), Vector2(-1.5, 1.5), Vector2(1.5, 1.5), Vector2(0, 2.0)]
+	for off in offsets:
+		draw_string(font, text_pos + off, text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, outline_color)
 	draw_string(font, text_pos, text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, text_color)
-

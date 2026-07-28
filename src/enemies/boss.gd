@@ -26,6 +26,7 @@ func _ready() -> void:
 	current_health = 1200.0
 	move_speed = 52.0
 	contact_damage = 20.0
+	z_index = 11
 
 func choose_next_attack() -> StringName:
 	var result := ATTACK_ORDER[next_attack_index]
@@ -145,24 +146,24 @@ func take_damage(amount: float, source: Node = null) -> bool:
 func _draw() -> void:
 	if dead:
 		return
-
 	var font := ThemeDB.fallback_font
 	var text := "無首守墓人"
-	var font_size := 22
+	var font_size := 32
 	var ascent := font.get_ascent(font_size)
 	var descent := font.get_descent(font_size)
 	var string_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
 	var text_pos := Vector2(-string_size.x / 2.0, (ascent - descent) / 2.0)
 
-	# Shadow & Text
-	draw_string(font, text_pos + Vector2(1, 1), text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0, 0, 0, 0.9))
-	draw_string(font, text_pos, text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0.95, 0.3, 0.4, 1.0))
-
+	var outline_color := Color(0, 0, 0, 0.95)
+	var offsets := [Vector2(-2.0, -2.0), Vector2(2.0, -2.0), Vector2(-2.0, 2.0), Vector2(2.0, 2.0), Vector2(0, 2.5)]
+	for off in offsets:
+		draw_string(font, text_pos + off, text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, outline_color)
+	draw_string(font, text_pos, text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(1.0, 0.25, 0.35, 1.0))
 
 	# Health bar over head
 	var hp_ratio := current_health / max_health
-	draw_rect(Rect2(-40, -28, 80, 6), Color(0.2, 0.2, 0.2, 0.8))
-	draw_rect(Rect2(-40, -28, 80 * hp_ratio, 6), Color(0.8, 0.1, 0.1, 0.9))
+	draw_rect(Rect2(-50, -36, 100, 8), Color(0.1, 0.1, 0.1, 0.85))
+	draw_rect(Rect2(-50, -36, 100 * hp_ratio, 8), Color(0.9, 0.15, 0.15, 0.95))
 
 	# Attack warnings
 	if attack_state == &"telegraph_charge":
