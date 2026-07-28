@@ -76,7 +76,7 @@ func _ready() -> void:
 	_transition(GamePhase.Phase.TITLE)
 
 func _process(delta: float) -> void:
-	if phase == GamePhase.Phase.COMBAT or phase == GamePhase.Phase.DOORS:
+	if phase == GamePhase.Phase.COMBAT:
 		remaining_sec -= delta
 		if hud:
 			hud.update_timer(maxf(0.0, remaining_sec))
@@ -89,7 +89,6 @@ func _process(delta: float) -> void:
 			select_door(0)
 		elif px >= 1220.0:
 			select_door(1)
-
 
 func start_run(next_config: RunConfig) -> void:
 	config = next_config
@@ -115,10 +114,11 @@ func start_run(next_config: RunConfig) -> void:
 		title_screen.hide()
 	if results_screen:
 		results_screen.hide()
+	var max_rooms := config.room_count if config else 7
 	if hud:
 		hud.hide_doors()
 		hud.update_health(100.0, 100.0)
-		hud.update_room(1)
+		hud.update_room(1, max_rooms)
 
 	if player_node:
 		player_node.global_position = Vector2(640, 400)
@@ -141,11 +141,12 @@ func finish_run(outcome: StringName) -> void:
 	_set_paused(true)
 	_transition(GamePhase.Phase.RESULTS)
 	
+	var max_rooms := config.room_count if config else 7
 	var summary := {
 		"outcome": outcome,
 		"elapsed_sec": config.time_limit_sec - remaining_sec if config else 0.0,
 		"kills": kills,
-		"rooms_cleared": current_room - 1 if outcome != &"victory" else 7,
+		"rooms_cleared": current_room - 1 if outcome != &"victory" else max_rooms,
 		"weapons": weapon_levels.duplicate(true),
 		"stats": player_node.get_stats() if player_node else player_stats,
 		"demo": config.is_demo if config else false,
@@ -214,7 +215,6 @@ func _on_upgrade_card_selected(id: StringName) -> void:
 		_set_paused(false)
 		_advance_to_next_room()
 
-
 func select_door(door_idx: int) -> void:
 	if door_idx < 0 or door_idx >= current_doors.size():
 		return
@@ -244,7 +244,8 @@ func select_door(door_idx: int) -> void:
 
 func _on_room_cleared(room_idx: int) -> void:
 	room_cleared.emit(room_idx)
-	if room_idx == 7:
+	var max_rooms := config.room_count if config else 7
+	if room_idx >= max_rooms:
 		boss_defeated.emit()
 		finish_run(&"victory")
 		return
@@ -256,8 +257,9 @@ func _on_room_cleared(room_idx: int) -> void:
 
 func _advance_to_next_room() -> void:
 	current_room += 1
+	var max_rooms := config.room_count if config else 7
 	if hud:
-		hud.update_room(current_room)
+		hud.update_room(current_room, max_rooms)
 	if player_node:
 		player_node.global_position = Vector2(640, 400)
 	_transition(GamePhase.Phase.COMBAT)
@@ -295,4 +297,3 @@ func _set_paused(val: bool) -> void:
 		var tree := get_tree()
 		if tree:
 			tree.paused = val
-

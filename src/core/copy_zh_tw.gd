@@ -5,7 +5,7 @@ extends RefCounted
 const GAME_TITLE := "暮墓餘燼"
 const GAME_SUBTITLE := "七分鐘房間式生存 Roguelike"
 const BTN_FORMAL_MODE := "開始獵殺（7 分鐘）"
-const BTN_DEMO_MODE := "快速展示模式"
+const BTN_DEMO_MODE := "快速展示模式（1 分鐘 / 4 關）"
 const BTN_RETRY := "再次挑戰"
 const BTN_RETURN_TITLE := "返回標題"
 

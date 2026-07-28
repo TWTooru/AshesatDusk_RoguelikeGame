@@ -12,8 +12,9 @@ const FORMAL_COUNTS := {
 }
 
 static func plan(index: int, cursed: bool, config: RunConfig) -> RoomPlan:
-	if index == 7:
-		return RoomPlan.new(index, 1.6, {}, cursed, true)
+	var max_rooms := config.room_count if config else 7
+	if index >= max_rooms:
+		return RoomPlan.new(index, 1.6 if not config or not config.is_demo else 1.2, {}, cursed, true)
 	
 	var base_counts: Dictionary = FORMAL_COUNTS.get(index, FORMAL_COUNTS[1]).duplicate()
 	var counts := {}
@@ -41,7 +42,6 @@ static func door_choices(index: int, rng: RandomNumberGenerator) -> Array[Dictio
 	if index == 6 and first != &"curse" and second != &"curse":
 		second = &"curse"
 	return [_door(first, index), _door(second, index)]
-
 
 static func _door(type: StringName, index: int) -> Dictionary:
 	match type:

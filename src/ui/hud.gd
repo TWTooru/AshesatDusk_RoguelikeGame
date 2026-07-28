@@ -29,12 +29,12 @@ func update_health(current: float, maximum: float) -> void:
 	if health_label:
 		health_label.text = "生命: %d / %d" % [int(ceil(current)), int(ceil(maximum))]
 
-func update_room(index: int) -> void:
+func update_room(index: int, max_rooms: int = 7) -> void:
 	if room_label:
-		if index == 7:
-			room_label.text = "房間: 7 (BOSS 戰)"
+		if index >= max_rooms:
+			room_label.text = "房間: %d (BOSS 戰)" % max_rooms
 		else:
-			room_label.text = "房間: %d / 7" % index
+			room_label.text = "房間: %d / %d" % [index, max_rooms]
 
 func update_timer(remaining_sec: float) -> void:
 	if timer_label:
