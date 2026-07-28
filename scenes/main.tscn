@@ -1,40 +1,49 @@
-[gd_scene load_steps=10 format=3 uid="uid://main_scene_001"]
+[gd_scene format=3 uid="uid://d21byeiiewav2"]
 
-[ext_resource type="Script" path="res://src/presentation/graveyard_backdrop.gd" id="1_backdrop"]
-[ext_resource type="Script" path="res://src/rooms/room_manager.gd" id="2_room_mgr"]
-[ext_resource type="PackedScene" uid="uid://player_scene_001" path="res://scenes/player/player.tscn" id="3_player"]
-[ext_resource type="Script" path="res://src/combat/weapon_controller.gd" id="4_weapons"]
-[ext_resource type="PackedScene" uid="uid://hud_scene_001" path="res://scenes/ui/hud.tscn" id="5_hud"]
-[ext_resource type="PackedScene" uid="uid://title_screen_scene_001" path="res://scenes/ui/title_screen.tscn" id="6_title"]
-[ext_resource type="PackedScene" uid="uid://upgrade_panel_scene_001" path="res://scenes/ui/upgrade_panel.tscn" id="7_upgrade"]
-[ext_resource type="PackedScene" uid="uid://results_screen_scene_001" path="res://scenes/ui/results_screen.tscn" id="8_results"]
-[ext_resource type="Script" path="res://src/core/game_controller.gd" id="9_controller"]
+[ext_resource type="Script" uid="uid://ckkwc5gs4eq1k" path="res://src/presentation/graveyard_backdrop.gd" id="1_backdrop"]
+[ext_resource type="Script" uid="uid://cu4jyeowr32lr" path="res://src/rooms/room_manager.gd" id="2_room_mgr"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="3_player"]
+[ext_resource type="Script" uid="uid://dc37jknwxccvg" path="res://src/combat/weapon_controller.gd" id="4_weapons"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="5_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/title_screen.tscn" id="6_title"]
+[ext_resource type="PackedScene" path="res://scenes/ui/upgrade_panel.tscn" id="7_upgrade"]
+[ext_resource type="PackedScene" path="res://scenes/ui/results_screen.tscn" id="8_results"]
+[ext_resource type="Script" uid="uid://2pxrgafmyirb" path="res://src/core/game_controller.gd" id="9_controller"]
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" unique_id=1789003374]
 
-[node name="Backdrop" type="Node2D" parent="."]
+[node name="Backdrop" type="Node2D" parent="." unique_id=1546989317]
 script = ExtResource("1_backdrop")
 
-[node name="RoomManager" type="Node2D" parent="."]
+[node name="RoomManager" type="Node2D" parent="." unique_id=767996366]
 script = ExtResource("2_room_mgr")
 
-[node name="Player" parent="." instance=ExtResource("3_player")]
+[node name="Player" parent="." unique_id=1705565050 instance=ExtResource("3_player")]
 position = Vector2(640, 400)
 
-[node name="WeaponController" type="Node2D" parent="Player"]
+[node name="WeaponController" type="Node2D" parent="Player" unique_id=396899741]
 script = ExtResource("4_weapons")
 
-[node name="HUD" parent="." instance=ExtResource("5_hud")]
+[node name="HUD" parent="." unique_id=1682697445 instance=ExtResource("5_hud")]
 
-[node name="TitleScreen" parent="." instance=ExtResource("6_title")]
+[node name="TitleScreen" parent="." unique_id=1180784804 instance=ExtResource("6_title")]
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 637.0
+offset_top = 262.0
+offset_right = 637.0
+offset_bottom = 262.0
+grow_horizontal = 1
+grow_vertical = 1
 
-[node name="UpgradePanel" parent="." instance=ExtResource("7_upgrade")]
+[node name="UpgradePanel" parent="." unique_id=2069273539 instance=ExtResource("7_upgrade")]
 visible = false
 
-[node name="ResultsScreen" parent="." instance=ExtResource("8_results")]
+[node name="ResultsScreen" parent="." unique_id=737651919 instance=ExtResource("8_results")]
 visible = false
 
-[node name="GameController" type="Node2D" parent="." node_paths=PackedStringArray("player_node", "room_manager", "weapon_controller", "hud", "title_screen", "upgrade_panel", "results_screen")]
+[node name="GameController" type="Node2D" parent="." unique_id=1186025486 node_paths=PackedStringArray("player_node", "room_manager", "weapon_controller", "hud", "title_screen", "upgrade_panel", "results_screen")]
 script = ExtResource("9_controller")
 player_node = NodePath("../Player")
 room_manager = NodePath("../RoomManager")
