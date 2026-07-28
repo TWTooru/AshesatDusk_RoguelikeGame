@@ -146,12 +146,17 @@ func _fire_soul_bolt(target: Node2D) -> void:
 	var dmg := weapon_damage(&"soul_bolt")
 	var dir := (target.global_position - global_position).normalized()
 	
+	var world_node: Node = get_tree().current_scene if is_inside_tree() and get_tree().current_scene else get_parent()
+	if world_node == get_parent() and get_parent() and get_parent().get_parent():
+		world_node = get_parent().get_parent()
+
 	for i in range(count):
 		var shot := PROJECTILE_SCENE.instantiate() as Projectile
-		get_parent().add_child(shot)
+		world_node.add_child(shot)
 		shot.global_position = global_position
 		var spread_angle := (i - (count - 1) / 2.0) * 0.2
 		shot.launch(dir.rotated(spread_angle), 380.0, dmg, &"player", 2.0)
+
 
 func _spawn_nether_flame(enemies: Array) -> void:
 	var level := int(weapon_levels[&"nether_flame"])
