@@ -212,10 +212,8 @@ func _on_upgrade_card_selected(id: StringName) -> void:
 		_show_next_upgrade()
 	else:
 		_set_paused(false)
-		if current_doors.is_empty():
-			_transition(GamePhase.Phase.COMBAT)
-		else:
-			_transition(GamePhase.Phase.DOORS)
+		_advance_to_next_room()
+
 
 func select_door(door_idx: int) -> void:
 	if door_idx < 0 or door_idx >= current_doors.size():
