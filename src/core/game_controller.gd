@@ -285,6 +285,8 @@ func _transition(to: GamePhase.Phase) -> void:
 		phase = to
 
 func _set_paused(val: bool) -> void:
-	var tree := get_tree()
-	if tree:
-		tree.paused = val
+	if is_inside_tree():
+		var tree := get_tree()
+		if tree:
+			tree.paused = val
+
