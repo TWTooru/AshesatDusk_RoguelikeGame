@@ -145,18 +145,21 @@ func take_damage(amount: float, source: Node = null) -> bool:
 func _draw() -> void:
 	if dead:
 		return
-	
-	# Boss body (Gravekeeper 32x40)
-	draw_rect(Rect2(-16, -20, 32, 40), Color(0.18, 0.15, 0.25, 1.0))
-	draw_rect(Rect2(-12, -16, 24, 10), Color(0.4, 0.35, 0.5, 1.0))
-	
-	# Headless violet soul flame at neck
-	draw_circle(Vector2(0, -22), 6.0, Color(0.7, 0.2, 0.9, 0.9))
-	
+
+	var font := ThemeDB.fallback_font
+	var text := "無首守墓人"
+	var font_size := 22
+	var text_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)
+	var text_pos := Vector2(-text_size.x / 2.0, text_size.y / 4.0)
+
+	# Shadow & Text
+	draw_string(font, text_pos + Vector2(1, 1), text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, Color(0, 0, 0, 0.9))
+	draw_string(font, text_pos, text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, Color(0.95, 0.3, 0.4, 1.0))
+
 	# Health bar over head
 	var hp_ratio := current_health / max_health
-	draw_rect(Rect2(-30, -38, 60, 6), Color(0.2, 0.2, 0.2, 0.8))
-	draw_rect(Rect2(-30, -38, 60 * hp_ratio, 6), Color(0.8, 0.1, 0.1, 0.9))
+	draw_rect(Rect2(-40, -28, 80, 6), Color(0.2, 0.2, 0.2, 0.8))
+	draw_rect(Rect2(-40, -28, 80 * hp_ratio, 6), Color(0.8, 0.1, 0.1, 0.9))
 
 	# Attack warnings
 	if attack_state == &"telegraph_charge":
