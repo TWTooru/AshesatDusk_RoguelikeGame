@@ -5,8 +5,11 @@ const PLAY_AREA := Rect2(32, 96, 1216, 592)
 var background_texture: Texture2D
 
 func _ready() -> void:
-	if ResourceLoader.exists("res://assets/generated/graveyard_background.png"):
-		background_texture = load("res://assets/generated/graveyard_background.png") as Texture2D
+	var path := "res://assets/generated/graveyard_background.png"
+	if FileAccess.file_exists(path):
+		var img := Image.load_from_file(path)
+		if img:
+			background_texture = ImageTexture.create_from_image(img)
 	queue_redraw()
 
 func _draw() -> void:

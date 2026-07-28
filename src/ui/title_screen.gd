@@ -12,13 +12,19 @@ signal demo_start_requested
 @onready var title_art: TextureRect = $TitleArt
 
 func _ready() -> void:
-	if ResourceLoader.exists("res://assets/generated/title_art.png"):
-		title_art.texture = load("res://assets/generated/title_art.png") as Texture2D
+	var path := "res://assets/generated/title_art.png"
+	if title_art and FileAccess.file_exists(path):
+		var img := Image.load_from_file(path)
+		if img:
+			title_art.texture = ImageTexture.create_from_image(img)
 	
-	title_label.text = CopyZhTw.GAME_TITLE
-	subtitle_label.text = CopyZhTw.GAME_SUBTITLE
-	formal_btn.text = CopyZhTw.BTN_FORMAL_MODE
-	demo_btn.text = CopyZhTw.BTN_DEMO_MODE
-	
-	formal_btn.pressed.connect(func(): formal_start_requested.emit())
-	demo_btn.pressed.connect(func(): demo_start_requested.emit())
+	if title_label:
+		title_label.text = CopyZhTw.GAME_TITLE
+	if subtitle_label:
+		subtitle_label.text = CopyZhTw.GAME_SUBTITLE
+	if formal_btn:
+		formal_btn.text = CopyZhTw.BTN_FORMAL_MODE
+		formal_btn.pressed.connect(func(): formal_start_requested.emit())
+	if demo_btn:
+		demo_btn.text = CopyZhTw.BTN_DEMO_MODE
+		demo_btn.pressed.connect(func(): demo_start_requested.emit())
