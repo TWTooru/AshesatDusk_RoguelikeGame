@@ -1,32 +1,37 @@
 # src/ui/upgrade_panel.gd
 class_name UpgradePanel
-extends Control
+extends CanvasLayer
 
 signal upgrade_selected(id: StringName)
 
-@onready var card1_btn: Button = $PanelContainer/Margin/VBox/CardsHBox/Card1
-@onready var card2_btn: Button = $PanelContainer/Margin/VBox/CardsHBox/Card2
-@onready var card3_btn: Button = $PanelContainer/Margin/VBox/CardsHBox/Card3
+@onready var card1_btn: Button = $Root/PanelContainer/Margin/VBox/CardsHBox/Card1
+@onready var card2_btn: Button = $Root/PanelContainer/Margin/VBox/CardsHBox/Card2
+@onready var card3_btn: Button = $Root/PanelContainer/Margin/VBox/CardsHBox/Card3
 
 var current_choices: Array[StringName] = []
 
 func _ready() -> void:
+	layer = 60
 	process_mode = PROCESS_MODE_ALWAYS
-	card1_btn.pressed.connect(func(): _select(0))
-	card2_btn.pressed.connect(func(): _select(1))
-	card3_btn.pressed.connect(func(): _select(2))
+	if card1_btn:
+		card1_btn.pressed.connect(func(): _select(0))
+	if card2_btn:
+		card2_btn.pressed.connect(func(): _select(1))
+	if card3_btn:
+		card3_btn.pressed.connect(func(): _select(2))
 
 func show_choices(choices: Array[StringName]) -> void:
 	current_choices = choices
 	var btns := [card1_btn, card2_btn, card3_btn]
 	for i in range(3):
-		if i < choices.size():
-			var choice_id := choices[i]
-			var label := UpgradeCatalog.label_for(choice_id)
-			btns[i].text = "[%d] %s" % [i + 1, label]
-			btns[i].show()
-		else:
-			btns[i].hide()
+		if btns[i]:
+			if i < choices.size():
+				var choice_id := choices[i]
+				var label := UpgradeCatalog.label_for(choice_id)
+				btns[i].text = "[%d] %s" % [i + 1, label]
+				btns[i].show()
+			else:
+				btns[i].hide()
 	show()
 
 func _select(index: int) -> void:

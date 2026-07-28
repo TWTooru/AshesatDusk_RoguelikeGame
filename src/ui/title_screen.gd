@@ -1,16 +1,17 @@
 # src/ui/title_screen.gd
 class_name TitleScreen
-extends Control
+extends CanvasLayer
 
 signal formal_start_requested
 signal demo_start_requested
 
-@onready var title_label: Label = $VBox/TitleLabel
-@onready var subtitle_label: Label = $VBox/SubtitleLabel
-@onready var formal_btn: Button = $VBox/FormalButton
-@onready var demo_btn: Button = $VBox/DemoButton
+@onready var title_label: Label = $Root/VBox/TitleLabel
+@onready var subtitle_label: Label = $Root/VBox/SubtitleLabel
+@onready var formal_btn: Button = $Root/VBox/FormalButton
+@onready var demo_btn: Button = $Root/VBox/DemoButton
 
 func _ready() -> void:
+	layer = 50
 	if title_label:
 		title_label.text = CopyZhTw.GAME_TITLE
 	if subtitle_label:
@@ -21,3 +22,9 @@ func _ready() -> void:
 	if demo_btn:
 		demo_btn.text = CopyZhTw.BTN_DEMO_MODE
 		demo_btn.pressed.connect(func(): demo_start_requested.emit())
+
+func show_screen() -> void:
+	show()
+
+func hide_screen() -> void:
+	hide()

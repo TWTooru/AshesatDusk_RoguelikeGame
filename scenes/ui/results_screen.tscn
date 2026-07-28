@@ -8,16 +8,19 @@ shader = ExtResource("2_blur")
 shader_parameter/blur_amount = 4.0
 shader_parameter/overlay_color = Color(0.06, 0.05, 0.08, 0.65)
 
-[node name="ResultsScreen" type="Control"]
+[node name="ResultsScreen" type="CanvasLayer"]
+layer = 70
+script = ExtResource("1_results")
+
+[node name="Root" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_results")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="Root"]
 material = SubResource("ShaderMaterial_blur")
 layout_mode = 1
 anchors_preset = 15
@@ -27,7 +30,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.04, 0.04, 0.06, 0.88)
 
-[node name="PanelContainer" type="PanelContainer" parent="."]
+[node name="PanelContainer" type="PanelContainer" parent="Root"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -41,25 +44,25 @@ offset_bottom = 180.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Margin" type="MarginContainer" parent="PanelContainer"]
+[node name="Margin" type="MarginContainer" parent="Root/PanelContainer"]
 layout_mode = 2
 theme_override_constants/margin_left = 25
 theme_override_constants/margin_top = 25
 theme_override_constants/margin_right = 25
 theme_override_constants/margin_bottom = 25
 
-[node name="VBox" type="VBoxContainer" parent="PanelContainer/Margin"]
+[node name="VBox" type="VBoxContainer" parent="Root/PanelContainer/Margin"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="OutcomeLabel" type="Label" parent="PanelContainer/Margin/VBox"]
+[node name="OutcomeLabel" type="Label" parent="Root/PanelContainer/Margin/VBox"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9, 0.2, 0.2, 1)
 theme_override_font_sizes/font_size = 36
 text = "獵魔人殞落"
 horizontal_alignment = 1
 
-[node name="StatsLabel" type="Label" parent="PanelContainer/Margin/VBox"]
+[node name="StatsLabel" type="Label" parent="Root/PanelContainer/Margin/VBox"]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.85, 0.85, 0.9, 1)
@@ -71,18 +74,18 @@ text = "存活時間: 00:00
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ButtonsHBox" type="HBoxContainer" parent="PanelContainer/Margin/VBox"]
+[node name="ButtonsHBox" type="HBoxContainer" parent="Root/PanelContainer/Margin/VBox"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="RetryButton" type="Button" parent="PanelContainer/Margin/VBox/ButtonsHBox"]
+[node name="RetryButton" type="Button" parent="Root/PanelContainer/Margin/VBox/ButtonsHBox"]
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18
 text = "再次挑戰"
 
-[node name="TitleButton" type="Button" parent="PanelContainer/Margin/VBox/ButtonsHBox"]
+[node name="TitleButton" type="Button" parent="Root/PanelContainer/Margin/VBox/ButtonsHBox"]
 custom_minimum_size = Vector2(0, 45)
 layout_mode = 2
 size_flags_horizontal = 3

@@ -8,16 +8,19 @@ shader = ExtResource("2_blur")
 shader_parameter/blur_amount = 4.0
 shader_parameter/overlay_color = Color(0.06, 0.05, 0.08, 0.65)
 
-[node name="TitleScreen" type="Control"]
+[node name="TitleScreen" type="CanvasLayer"]
+layer = 50
+script = ExtResource("1_title")
+
+[node name="Root" type="Control" parent="."]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_title")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="Root"]
 material = SubResource("ShaderMaterial_blur")
 layout_mode = 1
 anchors_preset = 15
@@ -27,7 +30,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.06, 0.05, 0.08, 1)
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="VBox" type="VBoxContainer" parent="Root"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

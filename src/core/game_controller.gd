@@ -69,6 +69,7 @@ func _ready() -> void:
 	if player_node:
 		player_node.health_changed.connect(_on_player_health_changed)
 		player_node.died.connect(_on_player_died)
+		player_node.hide()
 
 	if weapon_controller:
 		weapon_controller.damage_dealt.connect(_on_damage_dealt)
@@ -123,6 +124,7 @@ func start_run(next_config: RunConfig) -> void:
 	if player_node:
 		player_node.global_position = Vector2(640, 400)
 		player_node.reset_for_run(player_stats)
+		player_node.show()
 		
 	if weapon_controller:
 		weapon_controller.set_loadout(weapon_levels, player_stats)
@@ -158,6 +160,8 @@ func finish_run(outcome: StringName) -> void:
 func restart_to_title() -> void:
 	_set_paused(false)
 	finished = false
+	if player_node:
+		player_node.hide()
 	if room_manager:
 		room_manager.cleanup_room()
 	if hud:

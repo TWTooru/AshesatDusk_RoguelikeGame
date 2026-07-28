@@ -1,16 +1,17 @@
 # src/ui/results_screen.gd
 class_name ResultsScreen
-extends Control
+extends CanvasLayer
 
 signal retry_requested
 signal title_requested
 
-@onready var outcome_label: Label = $PanelContainer/Margin/VBox/OutcomeLabel
-@onready var stats_label: Label = $PanelContainer/Margin/VBox/StatsLabel
-@onready var retry_btn: Button = $PanelContainer/Margin/VBox/ButtonsHBox/RetryButton
-@onready var title_btn: Button = $PanelContainer/Margin/VBox/ButtonsHBox/TitleButton
+@onready var outcome_label: Label = $Root/PanelContainer/Margin/VBox/OutcomeLabel
+@onready var stats_label: Label = $Root/PanelContainer/Margin/VBox/StatsLabel
+@onready var retry_btn: Button = $Root/PanelContainer/Margin/VBox/ButtonsHBox/RetryButton
+@onready var title_btn: Button = $Root/PanelContainer/Margin/VBox/ButtonsHBox/TitleButton
 
 func _ready() -> void:
+	layer = 70
 	process_mode = PROCESS_MODE_ALWAYS
 	if retry_btn:
 		retry_btn.text = CopyZhTw.BTN_RETRY
