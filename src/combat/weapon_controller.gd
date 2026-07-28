@@ -184,20 +184,33 @@ func _spawn_nether_flame(enemies: Array) -> void:
 	})
 
 func _draw() -> void:
-	# Draw Bone Ring blades
+	var font := ThemeDB.fallback_font
+
+	# Bone Ring text
 	if weapon_levels.get(&"bone_ring", 0) > 0:
 		var level := int(weapon_levels[&"bone_ring"])
 		var blade_count: int = DEFINITIONS[&"bone_ring"].blades[level - 1]
 		var radius := 54.0
+		var text := "骨刃環"
+		var font_size := 13
+		var text_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)
+		var text_offset := Vector2(-text_size.x / 2.0, text_size.y / 4.0)
+
 		for i in range(blade_count):
 			var angle := bone_ring_angle + (i * TAU / blade_count)
 			var b_pos := Vector2(cos(angle), sin(angle)) * radius
-			draw_circle(b_pos, 5.0, Color(0.9, 0.95, 0.8, 0.9)) # Ivory bone blade
-			
-	# Draw active flames
+			draw_string(font, b_pos + text_offset + Vector2(1, 1), text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, Color(0, 0, 0, 0.8))
+			draw_string(font, b_pos + text_offset, text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, Color(0.95, 0.95, 0.85, 1.0))
+
+	# Nether Flame text
 	for flame in active_flames:
 		var local_pos := to_local(flame.pos)
 		if flame.warning_left > 0.0:
-			draw_circle(local_pos, flame.radius, Color(0.6, 0.1, 0.7, 0.3)) # Purple warning
+			draw_circle(local_pos, flame.radius, Color(0.6, 0.1, 0.7, 0.3))
 		else:
-			draw_circle(local_pos, flame.radius, Color(0.4, 0.0, 0.6, 0.45)) # Nether flame damage
+			draw_circle(local_pos, flame.radius, Color(0.4, 0.0, 0.6, 0.35))
+			var flame_text := "冥火法陣"
+			var font_size := 14
+			var text_size := font.get_string_size(flame_text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)
+			var text_offset := Vector2(-text_size.x / 2.0, text_size.y / 4.0)
+			draw_string(font, local_pos + text_offset, flame_text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, Color(0.85, 0.4, 1.0, 0.9))

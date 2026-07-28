@@ -54,7 +54,12 @@ func _on_area_entered(area: Area2D) -> void:
 		_on_body_entered(parent)
 
 func _draw() -> void:
-	if faction == &"player":
-		draw_circle(Vector2.ZERO, 4.0, Color(0.3, 0.8, 1.0, 0.9)) # Soul bolt blue
-	else:
-		draw_circle(Vector2.ZERO, 3.5, Color(1.0, 0.2, 0.2, 0.9)) # Enemy arrow red
+	var font := ThemeDB.fallback_font
+	var text := "幽魂彈" if faction == &"player" else "箭"
+	var text_color := Color(0.3, 0.85, 1.0) if faction == &"player" else Color(1.0, 0.3, 0.3)
+	var font_size := 12
+	var text_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)
+	var text_pos := Vector2(-text_size.x / 2.0, text_size.y / 4.0)
+
+	draw_string(font, text_pos + Vector2(1, 1), text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, Color(0, 0, 0, 0.8))
+	draw_string(font, text_pos, text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, text_color)
