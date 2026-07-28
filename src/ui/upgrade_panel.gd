@@ -50,4 +50,3 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif key_code == KEY_3 or key_code == KEY_KP_3:
 			_select(2)
 			get_viewport().set_input_as_handled()
-
