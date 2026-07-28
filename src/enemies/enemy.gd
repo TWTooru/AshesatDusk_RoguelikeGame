@@ -70,16 +70,25 @@ func _check_contact_damage() -> void:
 func _draw() -> void:
 	if dead:
 		return
-	match kind:
-		&"zombie":
-			draw_circle(Vector2.ZERO, 8.0, Color(0.3, 0.5, 0.35, 1.0))
-			draw_circle(Vector2(2, -2), 1.5, Color(0.9, 0.1, 0.1, 1.0))
-		&"archer":
-			draw_rect(Rect2(-6, -6, 12, 12), Color(0.5, 0.4, 0.3, 1.0))
-			draw_line(Vector2(-8, 0), Vector2(-4, -6), Color(0.8, 0.8, 0.8, 1.0), 2.0)
-		&"bat":
-			draw_set_transform(Vector2.ZERO, 0, Vector2(1, 1))
-			draw_colored_polygon(PackedVector2Array([Vector2(-9, -4), Vector2(0, 6), Vector2(9, -4), Vector2(0, 0)]), Color(0.35, 0.15, 0.45, 1.0))
-		&"knight":
-			draw_rect(Rect2(-10, -12, 20, 24), Color(0.25, 0.25, 0.35, 1.0))
-			draw_rect(Rect2(-8, -10, 16, 6), Color(0.8, 0.7, 0.2, 1.0)) # Gold helmet trim
+	var font := ThemeDB.fallback_font
+	var text_map := {
+		&"zombie": "腐屍",
+		&"archer": "骸骨弓手",
+		&"bat": "暗影蝙蝠",
+		&"knight": "墓園騎士",
+	}
+	var color_map := {
+		&"zombie": Color(0.4, 0.7, 0.45, 1.0),
+		&"archer": Color(0.75, 0.7, 0.6, 1.0),
+		&"bat": Color(0.7, 0.35, 0.8, 1.0),
+		&"knight": Color(0.9, 0.8, 0.3, 1.0),
+	}
+	var text: String = text_map.get(kind, "怪物")
+	var text_color: Color = color_map.get(kind, Color.WHITE)
+	var font_size := 15
+	var text_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)
+	var text_pos := Vector2(-text_size.x / 2.0, text_size.y / 4.0)
+
+	# Shadow & Text
+	draw_string(font, text_pos + Vector2(1, 1), text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, Color(0, 0, 0, 0.8))
+	draw_string(font, text_pos, text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, text_color)
