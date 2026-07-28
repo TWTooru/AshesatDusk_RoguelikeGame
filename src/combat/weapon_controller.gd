@@ -157,24 +157,25 @@ func _spawn_nether_flame(enemies: Array) -> void:
 	var level := int(weapon_levels[&"nether_flame"])
 	var radius: float = DEFINITIONS[&"nether_flame"].radii[level - 1]
 	var duration: float = DEFINITIONS[&"nether_flame"].duration
-	var dmg := weapon_damage(&"nether_flame")
+	var dmg: float = weapon_damage(&"nether_flame")
 	
 	# Find densest cluster from candidates
 	var best_pos := global_position
 	var max_count := -1
-	var sample_count := min(8, enemies.size())
+	var sample_count: int = mini(8, enemies.size())
 	for i in range(sample_count):
-		var cand := enemies[i] as Node2D
+		var cand: Node2D = enemies[i] as Node2D
 		if is_instance_valid(cand):
 			var pos := cand.global_position
 			var count := 0
 			for other in enemies:
-				var other_node := other as Node2D
+				var other_node: Node2D = other as Node2D
 				if is_instance_valid(other_node) and pos.distance_to(other_node.global_position) <= radius:
 					count += 1
 			if count > max_count:
 				max_count = count
 				best_pos = pos
+
 				
 	active_flames.append({
 		"pos": best_pos,

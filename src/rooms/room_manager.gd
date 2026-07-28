@@ -84,8 +84,9 @@ func _spawn_boss(difficulty: float) -> void:
 	add_child(boss)
 	active_enemies.append(boss)
 	boss.global_position = Vector2(640, 240)
-	boss.configure(difficulty, player_ref)
+	boss.configure(&"boss", difficulty, player_ref)
 	boss.died.connect(_on_enemy_died)
+
 
 func _get_spawn_position(index: int) -> Vector2:
 	# Distribute around perimeter

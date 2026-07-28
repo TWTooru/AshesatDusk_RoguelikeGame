@@ -39,9 +39,17 @@ grow_vertical = 1
 
 [node name="UpgradePanel" parent="." unique_id=2069273539 instance=ExtResource("7_upgrade")]
 visible = false
+offset_left = 641.0
+offset_top = 394.0
+offset_right = 641.0
+offset_bottom = 394.0
 
 [node name="ResultsScreen" parent="." unique_id=737651919 instance=ExtResource("8_results")]
 visible = false
+offset_left = 638.0
+offset_top = 398.0
+offset_right = 638.0
+offset_bottom = 398.0
 
 [node name="GameController" type="Node2D" parent="." unique_id=1186025486 node_paths=PackedStringArray("player_node", "room_manager", "weapon_controller", "hud", "title_screen", "upgrade_panel", "results_screen")]
 script = ExtResource("9_controller")

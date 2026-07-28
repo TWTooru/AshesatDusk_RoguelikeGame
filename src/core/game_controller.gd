@@ -119,7 +119,7 @@ func start_run(next_config: RunConfig) -> void:
 	if weapon_controller:
 		weapon_controller.set_loadout(weapon_levels, player_stats)
 
-	get_tree().paused = false
+	_set_paused(false)
 	_transition(GamePhase.Phase.COMBAT)
 	
 	if room_manager:
@@ -130,7 +130,7 @@ func finish_run(outcome: StringName) -> void:
 	if finished:
 		return
 	finished = true
-	get_tree().paused = true
+	_set_paused(true)
 	_transition(GamePhase.Phase.RESULTS)
 	
 	var summary := {
@@ -147,7 +147,7 @@ func finish_run(outcome: StringName) -> void:
 		results_screen.show_results(summary)
 
 func restart_to_title() -> void:
-	get_tree().paused = false
+	_set_paused(false)
 	finished = false
 	if room_manager:
 		room_manager.cleanup_room()
@@ -164,10 +164,10 @@ func restart_to_title() -> void:
 func toggle_pause() -> void:
 	if phase == GamePhase.Phase.COMBAT:
 		_transition(GamePhase.Phase.PAUSED)
-		get_tree().paused = true
+		_set_paused(true)
 	elif phase == GamePhase.Phase.PAUSED:
 		_transition(GamePhase.Phase.COMBAT)
-		get_tree().paused = false
+		_set_paused(false)
 
 func request_upgrade(count: int) -> void:
 	pending_upgrade_count = count
@@ -175,12 +175,12 @@ func request_upgrade(count: int) -> void:
 
 func _show_next_upgrade() -> void:
 	if pending_upgrade_count <= 0:
-		get_tree().paused = false
+		_set_paused(false)
 		_transition(GamePhase.Phase.COMBAT)
 		return
 
 	_transition(GamePhase.Phase.UPGRADE)
-	get_tree().paused = true
+	_set_paused(true)
 	var choices := UpgradeCatalog.choices(rng, player_stats, weapon_levels, 3)
 	upgrade_requested.emit(choices)
 	if upgrade_panel:
@@ -203,7 +203,7 @@ func _on_upgrade_card_selected(id: StringName) -> void:
 	if pending_upgrade_count > 0:
 		_show_next_upgrade()
 	else:
-		get_tree().paused = false
+		_set_paused(false)
 		if current_doors.is_empty():
 			_transition(GamePhase.Phase.COMBAT)
 		else:
@@ -283,3 +283,8 @@ func _transition(to: GamePhase.Phase) -> void:
 		return
 	if GamePhase.can_transition(phase, to):
 		phase = to
+
+func _set_paused(val: bool) -> void:
+	var tree := get_tree()
+	if tree:
+		tree.paused = val

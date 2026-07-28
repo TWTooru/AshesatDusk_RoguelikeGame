@@ -36,11 +36,12 @@ static func plan(index: int, cursed: bool, config: RunConfig) -> RoomPlan:
 
 static func door_choices(index: int, rng: RandomNumberGenerator) -> Array[Dictionary]:
 	var types: Array[StringName] = [&"weapon", &"ability", &"heal", &"curse"]
-	var first := types.pop_at(rng.randi_range(0, types.size() - 1))
-	var second := types.pop_at(rng.randi_range(0, types.size() - 1))
+	var first: StringName = types.pop_at(rng.randi_range(0, types.size() - 1))
+	var second: StringName = types.pop_at(rng.randi_range(0, types.size() - 1))
 	if index == 6 and first != &"curse" and second != &"curse":
 		second = &"curse"
 	return [_door(first, index), _door(second, index)]
+
 
 static func _door(type: StringName, index: int) -> Dictionary:
 	match type:

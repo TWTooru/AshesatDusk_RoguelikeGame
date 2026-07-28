@@ -39,7 +39,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not visible:
 		return
 	if event is InputEventKey and event.pressed and not event.echo:
-		var key_code := event.keycode
+		var key_event := event as InputEventKey
+		var key_code: Key = key_event.keycode
 		if key_code == KEY_1 or key_code == KEY_KP_1:
 			_select(0)
 			get_viewport().set_input_as_handled()
@@ -49,3 +50,4 @@ func _unhandled_input(event: InputEvent) -> void:
 		elif key_code == KEY_3 or key_code == KEY_KP_3:
 			_select(2)
 			get_viewport().set_input_as_handled()
+
