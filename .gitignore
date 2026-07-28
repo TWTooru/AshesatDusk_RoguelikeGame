@@ -5,3 +5,5 @@
 .import/
 *.import
 *.uid
+out.txt
+err.txt
