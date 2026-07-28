@@ -67,7 +67,8 @@ powershell -ExecutionPolicy Bypass -File .\tests\run_all.ps1
 
 ## 展示影片
 
-![展示影片](https://youtu.be/oFwzDAdyBKc)
+
+[TNDA實作－暮墓餘燼 (Ashes at Dusk)](https://youtu.be/oFwzDAdyBKc)
 
 ---
 
