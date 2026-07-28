@@ -83,14 +83,20 @@ func _physics_process(delta: float) -> void:
 func _draw() -> void:
 	if dead:
 		return
-	var fill_color := Color(0.95, 0.95, 1.0, 1.0) if invulnerability_left > 0.0 else Color(0.2, 0.25, 0.35, 1.0)
-	var hood_color := Color(0.12, 0.15, 0.22, 1.0)
-	var rune_gold := Color(0.95, 0.8, 0.2, 1.0)
-	
-	# Hood / Body (16x20)
-	draw_rect(Rect2(-8, -10, 16, 20), fill_color)
-	draw_rect(Rect2(-9, -11, 18, 8), hood_color)
-	
-	# Gold facing rune dot/arrow indicator
-	var rune_pos := facing_direction * 7.0
-	draw_circle(rune_pos, 3.0, rune_gold)
+	var font := ThemeDB.fallback_font
+	var text := "玩家"
+	var font_size := 16
+	var text_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)
+	var text_pos := Vector2(-text_size.x / 2.0, text_size.y / 4.0)
+
+	var text_color := Color(1.0, 1.0, 1.0, 1.0) if invulnerability_left > 0.0 else Color(0.85, 0.95, 1.0, 1.0)
+	var shadow_color := Color(0.0, 0.0, 0.0, 0.8)
+
+	# Shadow
+	draw_string(font, text_pos + Vector2(1, 1), text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, shadow_color)
+	# Main Text
+	draw_string(font, text_pos, text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, text_color)
+
+	# Gold facing rune dot indicator
+	var rune_pos := facing_direction * 18.0
+	draw_circle(rune_pos, 3.0, Color(0.95, 0.8, 0.2, 1.0))
