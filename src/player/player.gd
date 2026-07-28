@@ -18,6 +18,7 @@ var stats := {
 }
 
 var invulnerability_left := 0.0
+var heal_flash_timer := 0.0
 var control_enabled := true
 var dead := false
 var facing_direction := Vector2.RIGHT
@@ -31,6 +32,7 @@ func reset_for_run(new_stats: Dictionary) -> void:
 	if not stats.has("health"):
 		stats.health = stats.max_health
 	invulnerability_left = 0.0
+	heal_flash_timer = 0.0
 	control_enabled = true
 	dead = false
 	queue_redraw()
@@ -51,7 +53,9 @@ func heal(amount: float) -> void:
 	var old_health: float = stats.health
 	stats.health = minf(float(stats.max_health), float(stats.health) + amount)
 	if stats.health != old_health:
+		heal_flash_timer = 0.25
 		health_changed.emit(stats.health, stats.max_health)
+		queue_redraw()
 
 func take_damage(amount: float) -> bool:
 	if invulnerability_left > 0.0 or dead:
@@ -69,7 +73,8 @@ func take_damage(amount: float) -> bool:
 
 func _physics_process(delta: float) -> void:
 	invulnerability_left = maxf(0.0, invulnerability_left - delta)
-	if invulnerability_left > 0.0:
+	heal_flash_timer = maxf(0.0, heal_flash_timer - delta)
+	if invulnerability_left > 0.0 or heal_flash_timer > 0.0:
 		queue_redraw()
 	if control_enabled and not dead:
 		var input_vector := Input.get_vector("move_left", "move_right", "move_up", "move_down")
@@ -92,7 +97,12 @@ func _draw() -> void:
 	var string_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
 	var text_pos := Vector2(-string_size.x / 2.0, (ascent - descent) / 2.0)
 
-	var text_color := Color(1.0, 1.0, 1.0, 1.0) if invulnerability_left > 0.0 else Color(0.9, 0.98, 1.0, 1.0)
+	var text_color := Color(0.9, 0.98, 1.0, 1.0)
+	if invulnerability_left > 0.0:
+		text_color = Color(1.0, 0.4, 0.4, 1.0)
+	elif heal_flash_timer > 0.0:
+		text_color = Color(0.3, 1.0, 0.5, 1.0)
+
 	var outline_color := Color(0.0, 0.0, 0.0, 0.95)
 
 	# 4-directional outline

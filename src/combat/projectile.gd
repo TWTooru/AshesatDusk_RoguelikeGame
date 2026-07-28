@@ -7,17 +7,19 @@ var damage := 0.0
 var faction := &"player"
 var lifetime_left := 2.0
 var hit_registered := false
+var weapon_src: Node = null
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	area_entered.connect(_on_area_entered)
 	z_index = 15
 
-func launch(dir: Vector2, speed: float, dmg: float, owner_faction: StringName, seconds: float) -> void:
+func launch(dir: Vector2, speed: float, dmg: float, owner_faction: StringName, seconds: float, src_node: Node = null) -> void:
 	velocity = dir.normalized() * speed
 	damage = dmg
 	faction = owner_faction
 	lifetime_left = seconds
+	weapon_src = src_node
 	if dir != Vector2.ZERO:
 		rotation = dir.angle()
 	
@@ -40,7 +42,9 @@ func _on_body_entered(body: Node2D) -> void:
 		return
 	if faction == &"player" and body.is_in_group("enemies") and body.has_method("take_damage"):
 		hit_registered = true
-		body.take_damage(damage)
+		if body.take_damage(damage, weapon_src):
+			if weapon_src and weapon_src.has_method("record_damage"):
+				weapon_src.record_damage(damage)
 		queue_free()
 	elif faction == &"enemy" and body.is_in_group("player") and body.has_method("take_damage"):
 		hit_registered = true

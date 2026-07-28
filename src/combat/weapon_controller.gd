@@ -155,7 +155,7 @@ func _fire_soul_bolt(target: Node2D) -> void:
 		world_node.add_child(shot)
 		shot.global_position = global_position
 		var spread_angle := (i - (count - 1) / 2.0) * 0.2
-		shot.launch(dir.rotated(spread_angle), 380.0, dmg, &"player", 2.0)
+		shot.launch(dir.rotated(spread_angle), 380.0, dmg, &"player", 2.0, self)
 
 
 func _spawn_nether_flame(enemies: Array) -> void:
