@@ -193,14 +193,16 @@ func _draw() -> void:
 		var radius := 54.0
 		var text := "骨刃環"
 		var font_size := 13
-		var text_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)
-		var text_offset := Vector2(-text_size.x / 2.0, text_size.y / 4.0)
+		var ascent := font.get_ascent(font_size)
+		var descent := font.get_descent(font_size)
+		var string_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
+		var text_offset := Vector2(-string_size.x / 2.0, (ascent - descent) / 2.0)
 
 		for i in range(blade_count):
 			var angle := bone_ring_angle + (i * TAU / blade_count)
 			var b_pos := Vector2(cos(angle), sin(angle)) * radius
-			draw_string(font, b_pos + text_offset + Vector2(1, 1), text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, Color(0, 0, 0, 0.8))
-			draw_string(font, b_pos + text_offset, text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, Color(0.95, 0.95, 0.85, 1.0))
+			draw_string(font, b_pos + text_offset + Vector2(1, 1), text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0, 0, 0, 0.8))
+			draw_string(font, b_pos + text_offset, text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0.95, 0.95, 0.85, 1.0))
 
 	# Nether Flame text
 	for flame in active_flames:
@@ -211,6 +213,9 @@ func _draw() -> void:
 			draw_circle(local_pos, flame.radius, Color(0.4, 0.0, 0.6, 0.35))
 			var flame_text := "冥火法陣"
 			var font_size := 14
-			var text_size := font.get_string_size(flame_text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)
-			var text_offset := Vector2(-text_size.x / 2.0, text_size.y / 4.0)
-			draw_string(font, local_pos + text_offset, flame_text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, Color(0.85, 0.4, 1.0, 0.9))
+			var ascent := font.get_ascent(font_size)
+			var descent := font.get_descent(font_size)
+			var string_size := font.get_string_size(flame_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
+			var text_offset := Vector2(-string_size.x / 2.0, (ascent - descent) / 2.0)
+			draw_string(font, local_pos + text_offset, flame_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0.85, 0.4, 1.0, 0.9))
+

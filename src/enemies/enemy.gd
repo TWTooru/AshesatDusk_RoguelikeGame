@@ -86,9 +86,12 @@ func _draw() -> void:
 	var text: String = text_map.get(kind, "怪物")
 	var text_color: Color = color_map.get(kind, Color.WHITE)
 	var font_size := 15
-	var text_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size)
-	var text_pos := Vector2(-text_size.x / 2.0, text_size.y / 4.0)
+	var ascent := font.get_ascent(font_size)
+	var descent := font.get_descent(font_size)
+	var string_size := font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
+	var text_pos := Vector2(-string_size.x / 2.0, (ascent - descent) / 2.0)
 
 	# Shadow & Text
-	draw_string(font, text_pos + Vector2(1, 1), text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, Color(0, 0, 0, 0.8))
-	draw_string(font, text_pos, text, HORIZONTAL_ALIGNMENT_CENTER, -1, font_size, text_color)
+	draw_string(font, text_pos + Vector2(1, 1), text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0, 0, 0, 0.8))
+	draw_string(font, text_pos, text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, text_color)
+
