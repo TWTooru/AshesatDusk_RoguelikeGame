@@ -65,6 +65,10 @@
 powershell -ExecutionPolicy Bypass -File .\tests\run_all.ps1
 ```
 
+## 展示影片
+
+<video src="video.mp4" width="100%" controls></video>
+
 ---
 
 ## 🔗 GitHub 儲存庫
