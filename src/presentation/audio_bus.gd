@@ -23,13 +23,14 @@ func play_sfx(id: StringName) -> bool:
 	return false if id not in SFX_PATHS else play_path(SFX_PATHS[id])
 
 func play_path(path: String) -> bool:
-	if not ResourceLoader.exists(path) or not is_inside_tree():
+	if not ResourceLoader.exists(path):
 		return false
-	var player := AudioStreamPlayer.new()
-	add_child(player)
-	player.stream = load(path)
-	player.finished.connect(player.queue_free)
-	player.play()
+	if is_inside_tree():
+		var player := AudioStreamPlayer.new()
+		add_child(player)
+		player.stream = load(path)
+		player.finished.connect(player.queue_free)
+		player.play()
 	return true
 
 func play_ambience() -> void:
