@@ -79,13 +79,15 @@ func _spawn_enemy(kind: StringName, difficulty: float, index: int) -> void:
 
 func _spawn_boss(difficulty: float) -> void:
 	live_count = 1
-	var boss := CharacterBody2D.new() as Enemy
-	boss.set_script(BOSS_SCRIPT)
+	var boss_node := CharacterBody2D.new()
+	boss_node.set_script(BOSS_SCRIPT)
+	var boss := boss_node as Enemy
 	add_child(boss)
 	active_enemies.append(boss)
 	boss.global_position = Vector2(640, 240)
 	boss.configure(&"boss", difficulty, player_ref)
 	boss.died.connect(_on_enemy_died)
+
 
 
 func _get_spawn_position(index: int) -> Vector2:

@@ -7,10 +7,16 @@ var controller: GameController
 
 func _ready() -> void:
 	var path := "res://assets/generated/graveyard_background.png"
-	if FileAccess.file_exists(path):
-		var img := Image.load_from_file(path)
-		if img:
-			background_texture = ImageTexture.create_from_image(img)
+	if ResourceLoader.exists(path):
+		var res = load(path)
+		if res is Texture2D:
+			background_texture = res as Texture2D
+	if not background_texture:
+		var global_path := ProjectSettings.globalize_path(path)
+		if FileAccess.file_exists(global_path):
+			var img := Image.load_from_file(global_path)
+			if img:
+				background_texture = ImageTexture.create_from_image(img)
 	queue_redraw()
 
 func _process(_delta: float) -> void:
